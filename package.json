@@ -7,7 +7,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@mollie/api-client": "^4.9.0"
+"@mollie/api-client": "^4.8.0"
   },
   "devDependencies": {
     "typescript": "^5.3.3"
