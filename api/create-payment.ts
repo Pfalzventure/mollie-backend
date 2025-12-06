@@ -9,11 +9,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const { cart } = req.body as { cart: CartItem[] };
 
+  // Grundvalidierung
   if (!Array.isArray(cart) || cart.length === 0) {
     return res.status(400).json({ error: "Invalid cart" });
   }
 
-  // Serverseitige Berechnung
+  // Detailvalidierung
+  for (const item of cart) {
+    if (
+      typeof item.price !== "number" ||
+      typeof item.qty !== "number" ||
+      item.price <= 0 ||
+      item.qty <= 0 ||
+      !Number.isFinite(item.price) ||
+      !Number.isInteger(item.qty)
+    ) {
+      return res.status(400).json({ error: "Invalid cart item values" });
+    }
+  }
+
+  // Float-sichere Berechnung
   const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
   const totalStr = total.toFixed(2);
 
@@ -37,6 +52,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     return res.status(200).json({ checkoutUrl: payment.getCheckoutUrl() });
   } catch (err: any) {
-    return res.status(500).json({ error: "Payment creation failed", detail: err.message });
+    return res.status(500).json({
+      error: "Payment creation failed",
+      detail: err.message
+    });
   }
 }
