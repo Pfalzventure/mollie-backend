@@ -56,7 +56,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       ]
     });
 
-    return res.status(200).json({ checkoutUrl: payment.getCheckoutUrl() });
+   return res.status(200).json({ checkoutUrl: payment._links.checkout.href });
+
   } catch (err: any) {
     return res.status(500).json({
       error: "Payment creation failed",
