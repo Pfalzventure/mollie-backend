@@ -47,13 +47,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       description: cart.map(i => `${i.name} x${i.qty}`).join("; "),
       redirectUrl: "https://pfalzventure.github.io/success.html",
       webhookUrl: "https://mollie-backend-one.vercel.app/api/webhook",
-      method: [
-        "creditcard",
-        "directdebit",
-        "applepay",
-        "googlepay",
-        "giropay"
-      ]
+     
+      
+// @ts-ignore
+method: ["creditcard", "directdebit", "applepay", "googlepay", "giropay"]
     });
 
    return res.status(200).json({ checkoutUrl: payment._links.checkout.href });
