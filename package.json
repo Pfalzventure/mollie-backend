@@ -3,9 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "vercel dev",
-    "build": "tsc"
-  },
+    "dev": "vercel dev"
+     },
   "dependencies": {
     "@mollie/api-client": "^3.6.2",
     "typescript": "^5.3.3"
