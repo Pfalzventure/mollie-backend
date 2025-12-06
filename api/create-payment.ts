@@ -48,11 +48,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       redirectUrl: "https://pfalzventure.github.io/success.html",
       webhookUrl: "https://mollie-backend-one.vercel.app/api/webhook",
       method: [
-        "creditcard"
-       // "directdebit",
-       // "applepay",
-       // "googlepay",
-       // "giropay"
+        "creditcard",
+        "directdebit",
+        "applepay",
+        "googlepay",
+        "giropay"
       ]
     });
 
