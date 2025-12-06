@@ -2,20 +2,37 @@ import { VercelRequest, VercelResponse } from "@vercel/node";
 import { mollie } from "../mollieClient";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== "POST") return res.status(405).end();
+
+  // --- CORS ---
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    // Preflight erfolgreich
+    return res.status(200).end();
+  }
+  // -------------
+
+  if (req.method !== "POST") {
+    return res.status(405).end();
+  }
 
   const paymentId = req.body.id;
-  if (!paymentId) return res.status(200).end(); // Mollie erwartet 200 OK
+
+  // Mollie erwartet IMMER HTTP 200 – selbst wenn id fehlt
+  if (!paymentId) {
+    return res.status(200).end();
+  }
 
   try {
     const payment = await mollie.payments.get(paymentId);
     console.log("Payment status:", payment.status);
 
-    // Optional später:
+    // Später hier:
     // if (payment.isPaid()) { ... }
     // if (payment.isCanceled()) { ... }
-    // if (payment.isExpired()) { ... }
-    // usw.
+    // etc.
   } catch (e) {
     console.error("Webhook error:", e);
   }
