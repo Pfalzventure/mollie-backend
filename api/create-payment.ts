@@ -39,8 +39,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         value: totalStr
       },
       description: cart.map(i => `${i.name} x${i.qty}`).join("; "),
-      redirectUrl: "https://DEIN-FRONTEND-DOMAIN/success.html",
-      webhookUrl: "https://DEIN-BACKEND-DOMAIN/api/webhook",
+      redirectUrl: "https://pfalzventure.github.io/success.html",
+      webhookUrl: "https://mollie-backend-one.vercel.app/api/webhook",
       method: [
         "creditcard",
         "directdebit",
