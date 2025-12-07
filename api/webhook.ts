@@ -1,7 +1,8 @@
-import { VercelRequest, VercelResponse } from "@vercel/node";
+
 import { mollie } from "../mollieClient";
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: any, res: any)
+
 
   // --- CORS ---
   res.setHeader("Access-Control-Allow-Origin", "*");
