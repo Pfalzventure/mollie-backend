@@ -37,15 +37,8 @@ export default async function handler(req: any, res: any) {
 
       // --- PAYMENT METHODS ---
       // @ts-ignore
-      method: [
-        "creditcard",
-        "directdebit",
-        "applepay",
-        "googlepay",
-        "giropay",
-        "klarnapaynow",
-        "klarnapaylater"
-      ]
+   method: undefined,
+
     });
 
     // Mollie-official & TS-safe way
