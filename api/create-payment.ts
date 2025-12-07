@@ -32,7 +32,7 @@ export default async function handler(req: any, res: any) {
         value: totalStr
       },
       description: cart.map(i => `${i.name} x${i.qty}`).join("; "),
-      redirectUrl: "https://pfalzventure.github.io/success.html",
+     redirectUrl: `https://pfalzventure.github.io/pending.html?id=${payment.id}`,
       webhookUrl: "https://mollie-backend-one.vercel.app/api/webhook",
 
       // --- PAYMENT METHODS ---
