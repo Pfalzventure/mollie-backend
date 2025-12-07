@@ -2,10 +2,11 @@
 
 import { mollie } from "../mollieClient";
 
-// Node env types erzwingen
-declare const process: any;
+/* fix missing Node process types */
+declare var process: any;
 
 export default async function handler(req: any, res: any) {
+  // --- CORS ---
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -16,6 +17,7 @@ export default async function handler(req: any, res: any) {
 
   const { cart } = req.body;
 
+  // Validation
   if (!Array.isArray(cart) || cart.length === 0) {
     return res.status(400).json({ error: "Invalid cart" });
   }
@@ -33,20 +35,21 @@ export default async function handler(req: any, res: any) {
       redirectUrl: "https://pfalzventure.github.io/success.html",
       webhookUrl: "https://mollie-backend-one.vercel.app/api/webhook",
 
-   // @ts-ignore
-method: [
-  "creditcard",
-  "directdebit",
-  "applepay",
-  "googlepay",
-  "giropay",
-  "klarnapaynow",
-  "klarnapaylater"
-],
+      // --- PAYMENT METHODS ---
+      // @ts-ignore
+      method: [
+        "creditcard",
+        "directdebit",
+        "applepay",
+        "googlepay",
+        "giropay",
+        "klarnapaynow",
+        "klarnapaylater"
+      ]
     });
 
-    // WICHTIG: checkout URL korrekt holen
-    const checkoutUrl = payment._links.checkout.href;
+    // Mollie-official & TS-safe way
+    const checkoutUrl = payment.getCheckoutUrl();
 
     return res.status(200).json({ checkoutUrl });
 
