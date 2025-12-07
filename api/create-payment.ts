@@ -2,9 +2,6 @@
 
 import { mollie } from "../mollieClient";
 
-/* fix missing Node process types */
-declare var process: any;
-
 export default async function handler(req: any, res: any) {
   // CORS
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -21,31 +18,21 @@ export default async function handler(req: any, res: any) {
     return res.status(400).json({ error: "Invalid cart" });
   }
 
-  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
-  const totalStr = total.toFixed(2);
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0).toFixed(2);
 
   try {
-    // 1️⃣ Payment OHNE redirectUrl erstellen
     const payment = await mollie.payments.create({
       amount: {
         currency: "EUR",
-        value: totalStr
+        value: total
       },
       description: cart.map(i => `${i.name} x${i.qty}`).join("; "),
-      webhookUrl: "https://mollie-backend-one.vercel.app/api/webhook",
-      // @ts-ignore
-      method: undefined
+      redirectUrl: `https://pfalzventure.github.io/pending.html`,
+      webhookUrl: "https://mollie-backend-one.vercel.app/api/webhook"
     });
 
-    // 2️⃣ redirectUrl NACH dem Erstellen setzen
-    const redirectUrl = `https://pfalzventure.github.io/pending.html?id=${payment.id}`;
-
-    // 3️⃣ Checkout URL holen
-    const checkoutUrl = payment.getCheckoutUrl();
-
     return res.status(200).json({
-      checkoutUrl,
-      redirectUrl
+      checkoutUrl: payment.getCheckoutUrl()
     });
 
   } catch (err: any) {
