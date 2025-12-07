@@ -6,7 +6,7 @@ import { mollie } from "../mollieClient";
 declare var process: any;
 
 export default async function handler(req: any, res: any) {
-  // --- CORS ---
+  // CORS
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -17,7 +17,6 @@ export default async function handler(req: any, res: any) {
 
   const { cart } = req.body;
 
-  // Validation
   if (!Array.isArray(cart) || cart.length === 0) {
     return res.status(400).json({ error: "Invalid cart" });
   }
@@ -26,7 +25,7 @@ export default async function handler(req: any, res: any) {
   const totalStr = total.toFixed(2);
 
   try {
-    // 1⟩ Erst Payment OHNE redirectUrl erzeugen
+    // 1️⃣ Payment OHNE redirectUrl erstellen
     const payment = await mollie.payments.create({
       amount: {
         currency: "EUR",
@@ -38,14 +37,16 @@ export default async function handler(req: any, res: any) {
       method: undefined
     });
 
-    // 2⟩ Jetzt, wo payment.id existiert, redirectUrl setzen
-    await mollie.payments.update(payment.id, {
-      redirectUrl: `https://pfalzventure.github.io/pending.html?id=${payment.id}`
-    });
+    // 2️⃣ redirectUrl NACH dem Erstellen setzen
+    const redirectUrl = `https://pfalzventure.github.io/pending.html?id=${payment.id}`;
 
+    // 3️⃣ Checkout URL holen
     const checkoutUrl = payment.getCheckoutUrl();
 
-    return res.status(200).json({ checkoutUrl });
+    return res.status(200).json({
+      checkoutUrl,
+      redirectUrl
+    });
 
   } catch (err: any) {
     console.error("Payment error:", err);
