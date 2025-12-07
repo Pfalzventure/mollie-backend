@@ -33,13 +33,11 @@ export default async function handler(req: any, res: any) {
       },
       description: cart.map(i => `${i.name} x${i.qty}`).join("; "),
 
-      // ✔ neue Redirect-URL für Pending-Seite
-      redirectUrl: "https://pfalzventure.github.io/pending.html",
+      // Wichtig: paymentId in Redirect mitschicken
+      redirectUrl: `https://pfalzventure.github.io/pending.html?id=${payment.id}`,
 
-      // ✔ Webhook bleibt gleich
       webhookUrl: "https://mollie-backend-one.vercel.app/api/webhook",
 
-      // ❗ nicht löschen, aber korrekt formatiert
       // @ts-ignore
       method: undefined
     });
