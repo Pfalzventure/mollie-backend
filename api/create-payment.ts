@@ -34,7 +34,7 @@ export default async function handler(req: any, res: any) {
     });
 
     // 2️⃣ redirectUrl NACHTRÄGLICH generieren (nur Clientseitig)
-    const redirectUrl = `https://pfalzventure.github.io/pending.html?id=${payment.id}`;
+redirectUrl: "https://pfalzventure.github.io/pending.html",
 
     // Wenn du willst, kannst du redirectUrl im Payment updaten,
     // aber das ist für Mollie NICHT notwendig!
