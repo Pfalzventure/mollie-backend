@@ -26,20 +26,21 @@ export default async function handler(req: any, res: any) {
   const totalStr = total.toFixed(2);
 
   try {
+    // 1⟩ Erst Payment OHNE redirectUrl erzeugen
     const payment = await mollie.payments.create({
       amount: {
         currency: "EUR",
         value: totalStr
       },
       description: cart.map(i => `${i.name} x${i.qty}`).join("; "),
-
-      // Wichtig: paymentId in Redirect mitschicken
-      redirectUrl: `https://pfalzventure.github.io/pending.html?id=${payment.id}`,
-
       webhookUrl: "https://mollie-backend-one.vercel.app/api/webhook",
-
       // @ts-ignore
       method: undefined
+    });
+
+    // 2⟩ Jetzt, wo payment.id existiert, redirectUrl setzen
+    await mollie.payments.update(payment.id, {
+      redirectUrl: `https://pfalzventure.github.io/pending.html?id=${payment.id}`
     });
 
     const checkoutUrl = payment.getCheckoutUrl();
