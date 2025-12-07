@@ -33,8 +33,8 @@ export default async function handler(req: any, res: any) {
       redirectUrl: "https://pfalzventure.github.io/success.html",
       webhookUrl: "https://mollie-backend-one.vercel.app/api/webhook",
 
-      // Methoden explizit erlauben
-  method: [
+   // @ts-ignore
+method: [
   "creditcard",
   "directdebit",
   "applepay",
@@ -42,7 +42,7 @@ export default async function handler(req: any, res: any) {
   "giropay",
   "klarnapaynow",
   "klarnapaylater"
-]
+],
     });
 
     // WICHTIG: checkout URL korrekt holen
