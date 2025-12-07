@@ -34,15 +34,15 @@ export default async function handler(req: any, res: any) {
       webhookUrl: "https://mollie-backend-one.vercel.app/api/webhook",
 
       // Methoden explizit erlauben
-      method: [
-        "creditcard",
-        "directdebit",
-        "applepay",
-        "googlepay",
-        "giropay",
-        "klarna_paynow",
-        "klarna_paylater"
-      ],
+  method: [
+  "creditcard",
+  "directdebit",
+  "applepay",
+  "googlepay",
+  "giropay",
+  "klarnapaynow",
+  "klarnapaylater"
+]
     });
 
     // WICHTIG: checkout URL korrekt holen
