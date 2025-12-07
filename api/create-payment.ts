@@ -39,7 +39,9 @@ export default async function handler(req: any, res: any) {
         "directdebit",
         "applepay",
         "googlepay",
-        "giropay"
+        "giropay",
+        "klarna_paynow",
+        "klarna_paylater"
       ],
     });
 
