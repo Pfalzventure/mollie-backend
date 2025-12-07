@@ -1,9 +1,12 @@
+// api/webhook.ts
 
 import { mollie } from "../mollieClient";
 
-export default async function handler(req: any, res: any)
+// @ts-ignore
+declare const process: any;
 
-
+export default async function handler(req: any, res: any) {
+  
   // --- CORS ---
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
