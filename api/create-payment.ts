@@ -1,8 +1,5 @@
-// api/create-payment.ts
-
 import { mollie } from "../mollieClient";
 
-/* fix missing Node process types */
 declare var process: any;
 
 export default async function handler(req: any, res: any) {
@@ -17,7 +14,6 @@ export default async function handler(req: any, res: any) {
 
   const { cart } = req.body;
 
-  // Validation
   if (!Array.isArray(cart) || cart.length === 0) {
     return res.status(400).json({ error: "Invalid cart" });
   }
@@ -26,25 +22,28 @@ export default async function handler(req: any, res: any) {
   const totalStr = total.toFixed(2);
 
   try {
+    // 1️⃣ Payment OHNE redirectUrl erzeugen
     const payment = await mollie.payments.create({
       amount: {
         currency: "EUR",
         value: totalStr
       },
       description: cart.map(i => `${i.name} x${i.qty}`).join("; "),
-     redirectUrl: `https://pfalzventure.github.io/pending.html?id=${payment.id}`,
       webhookUrl: "https://mollie-backend-one.vercel.app/api/webhook",
-
-      // --- PAYMENT METHODS ---
-      // @ts-ignore
-   method: undefined,
-
+      method: undefined
     });
 
-    // Mollie-official & TS-safe way
-    const checkoutUrl = payment.getCheckoutUrl();
+    // 2️⃣ redirectUrl NACHTRÄGLICH generieren (nur Clientseitig)
+    const redirectUrl = `https://pfalzventure.github.io/pending.html?id=${payment.id}`;
 
-    return res.status(200).json({ checkoutUrl });
+    // Wenn du willst, kannst du redirectUrl im Payment updaten,
+    // aber das ist für Mollie NICHT notwendig!
+
+    // 3️⃣ Checkout-URL zurückgeben
+    return res.status(200).json({
+      checkoutUrl: payment.getCheckoutUrl(),
+      redirectUrl
+    });
 
   } catch (err: any) {
     console.error("Payment error:", err);
