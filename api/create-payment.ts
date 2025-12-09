@@ -27,7 +27,7 @@ export default async function handler(req: any, res: any) {
         value: total
       },
       description: cart.map(i => `${i.name} x${i.qty}`).join("; "),
-      redirectUrl: `https://pfalzventure.github.io/pending.html`,
+      redirectUrl: `https://mollie-backend-one.vercel.app/api/redirect`,
       webhookUrl: "https://mollie-backend-one.vercel.app/api/webhook"
     });
 
