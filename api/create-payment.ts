@@ -18,12 +18,13 @@ export default async function handler(req: any, res: any) {
     const payment = await mollie.payments.create({
       amount: { currency: "EUR", value: total },
       description: cart.map(i => `${i.name} x${i.qty}`).join("; "),
-      redirectUrl: "https://pfalzventure.github.io/success.html", // <- hier direkt success.html
+      // redirectUrl mit Payment-ID
+      redirectUrl: `https://pfalzventure.github.io/success.html?id=${payment.id}`,
       webhookUrl: "https://mollie-backend-one.vercel.app/api/webhook"
     });
 
     return res.status(200).json({
-      checkoutUrl: payment.getCheckoutUrl() // <- URL für Mollie-Checkout
+      checkoutUrl: payment.getCheckoutUrl()
     });
 
   } catch (err: any) {
